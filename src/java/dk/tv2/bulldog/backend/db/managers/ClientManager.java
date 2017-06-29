@@ -137,7 +137,7 @@ public class ClientManager extends Client {
         try (Connection connection = (cachedConnection != null && !cachedConnection.isClosed()) ? cachedConnection : dataSource.getConnection()) {
 
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_CLIENT);
-            preparedStatement.setInt(0, id);
+            preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {

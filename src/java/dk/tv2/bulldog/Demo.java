@@ -3,6 +3,7 @@ package dk.tv2.bulldog;
 import dk.tv2.bulldog.backend.db.DatasourceMock;
 import dk.tv2.bulldog.backend.db.EntityManager;
 import dk.tv2.bulldog.backend.db.entities.Client;
+import dk.tv2.bulldog.backend.db.entities.ClientMapping;
 import dk.tv2.bulldog.backend.db.managers.DataSourceManager;
 import dk.tv2.bulldog.backend.io.Actions;
 import dk.tv2.bulldog.backend.io.Configuration;
@@ -24,11 +25,28 @@ public class Demo {
         
         Client client = EntityManager.create(Client.class);        
         client.setName("TTV NXT");
-        client.setDescription("TTV Kastrup Airport XML Files");
+        client.setDescription("TTV NXT WebService");
         
         if (client.create()) {
             System.out.println("Created " + client.toString());
         }
+        
+        client = EntityManager.create(Client.class).load(1);
+        
+        if (client != null) {
+            
+            ClientMapping clientMapping = EntityManager.create(ClientMapping.class);
+            clientMapping.setActions(Actions.getActions(Actions.CREATED));
+            clientMapping.setClientId(client.getId());
+            clientMapping.setName("Kastrup XML");
+            clientMapping.setPath("/Users/migo/test");
+            clientMapping.setPattern("*.xml");
+            clientMapping.setUrl("http://localhost:8080/ttv/import/kastrup");
+            clientMapping.create();
+            
+            
+        }
+        
         
         
         
