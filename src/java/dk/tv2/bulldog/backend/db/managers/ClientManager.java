@@ -33,7 +33,7 @@ public class ClientManager extends Client {
     private final static String SELECT_CLIENT = "SELECT * FROM client where id = ? ".intern();
     private final static String UPDATE_CLIENT = "UPDATE client set name = ? , description = ? where id = ? ".intern();
     private final static String DELETE_CLIENT = "DELETE FROM client where id = ? ".intern();
-    private final static String INSERT_CLIENT = "INSERT INTO client (name, description) values (?,?) ".intern();
+    private final static String INSERT_CLIENT = "INSERT INTO client (name, description) values (?,?) RETURNING id".intern();
 
     @Override
     public List<Client> loadAll() {
@@ -54,7 +54,6 @@ public class ClientManager extends Client {
         return clients;
     }
 
-    
     @Override
     public boolean create() {
         try (Connection connection = (cachedConnection != null && !cachedConnection.isClosed()) ? cachedConnection : dataSource.getConnection()) {
@@ -62,11 +61,32 @@ public class ClientManager extends Client {
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_CLIENT);
             preparedStatement.setString(1, getName());
             preparedStatement.setString(2, getDescription());
-            int resultCount = preparedStatement.executeUpdate();
 
-            return resultCount > 0;
+            boolean useGeneratedKeys = false;
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet == null) {
+                resultSet = preparedStatement.getGeneratedKeys();
+                useGeneratedKeys = true;
+            }
+
+            if (resultSet != null && resultSet.next()) {
+                if (useGeneratedKeys) {
+                    setId(resultSet.getInt(1));
+                } else {
+                    setId(resultSet.getInt("id"));
+                }
+
+                setCreated(new Date());
+                return true;
+            } else {
+                return false;
+            }
+
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "ClientManager.create() threw an exception", e);
+            if (!e.getMessage().contains("duplicate key")) {
+                logger.log(Level.SEVERE, "ClientManager.create() threw an exception", e);
+            }
 
         }
         return false;
@@ -133,8 +153,9 @@ public class ClientManager extends Client {
 
     private Client readEntity(ResultSet resultSet) throws SQLException {
         Client client = EntityManager.create(Client.class);
-        client.setId(resultSet.getInt("channel_id"));
-        client.setName(resultSet.getString("channel_name"));
+        client.setId(resultSet.getInt("id"));
+        client.setName(resultSet.getString("name"));
+        client.setDescription(resultSet.getString("description"));
         client.setCreated(new Date(resultSet.getTimestamp("created_at").getTime()));
         return client;
     }

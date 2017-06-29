@@ -75,9 +75,9 @@ public class DatasourceMock implements DataSource {
     private Connection getLocalConnection() throws SQLException {
 
         if (connection == null) {
-            connection = new Connection(DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/teletext?user=teletextuser&password=teletext"));
+            connection = new Connection(DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/bulldog?user=bulldog&password=bulldogpass"));
         } else if (!connection.isIsFree() || connection.isClosed()) {
-            connection = new Connection(DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/teletext?user=teletextuser&password=teletext"));
+            connection = new Connection(DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/bulldog?user=bulldog&password=bulldogpass"));
         }
         return connection;
     }
