@@ -54,6 +54,7 @@ public class ClientManager extends Client {
         return clients;
     }
 
+    
     @Override
     public boolean create() {
         try (Connection connection = (cachedConnection != null && !cachedConnection.isClosed()) ? cachedConnection : dataSource.getConnection()) {
