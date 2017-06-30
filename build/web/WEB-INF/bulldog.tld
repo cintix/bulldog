@@ -12,13 +12,26 @@
     <name>TopMenuView</name>
     <tag-class>dk.tv2.bulldog.fontend.tags.TopMenuView</tag-class>
     <body-content>empty</body-content>
-  </tag> 
-  
+  </tag>
   <tag>
-    <name>ClientlList</name>
-    <tag-class>dk.tv2.bulldog.fontend.tags.ClientlList</tag-class>
+    <name>ClientList</name>
+    <tag-class>dk.tv2.bulldog.fontend.tags.ClientList</tag-class>
     <body-content>empty</body-content>
-  </tag> 
-    
+  </tag>
+  <tag>
+    <name>MappingList</name>
+    <tag-class>dk.tv2.bulldog.fontend.tags.MappingList</tag-class>
+    <body-content>empty</body-content>
+  </tag>
+  <tag>
+    <name>ClientInputList</name>
+    <tag-class>dk.tv2.bulldog.fontend.tags.ClientInputList</tag-class>
+    <body-content>empty</body-content>
+    <attribute>
+      <name>selected</name>
+      <type>java.lang.Integer</type>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
 </taglib>
-

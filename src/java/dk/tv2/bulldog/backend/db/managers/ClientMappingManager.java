@@ -31,7 +31,7 @@ public class ClientMappingManager extends ClientMapping {
 
     private final static String SELECT_ALL_CLIENT_MAPPING_MAPPING = "SELECT * FROM client_mapping".intern();
     private final static String SELECT_CLIENT_MAPPING = "SELECT * FROM client_mapping where id = ? ".intern();
-    private final static String UPDATE_CLIENT_MAPPING = "UPDATE client_mapping set actions = ?, name = ? , path = ? , url = ?, updated_at = now() pattern = ? where id = ? ".intern();
+    private final static String UPDATE_CLIENT_MAPPING = "UPDATE client_mapping set actions = ?, name = ? , path = ? , url = ?, updated_at = now(), pattern = ? where id = ? ".intern();
     private final static String DELETE_CLIENT_MAPPING = "DELETE FROM client_mapping where id = ? ".intern();
     private final static String DELETE_ALL_CLINET_CLIENT_MAPPING = "DELETE FROM client_mapping where client_id = ? ".intern();
     private final static String INSERT_CLIENT_MAPPING = "INSERT INTO client_mapping (client_id, actions, name, path, url, pattern) values (?,?,?,?,?,?) RETURNING id".intern();
@@ -105,6 +105,7 @@ public class ClientMappingManager extends ClientMapping {
             preparedStatement.setString(3, getPath());
             preparedStatement.setString(4, getUrl());
             preparedStatement.setString(5, getPattern());
+            preparedStatement.setInt(6, getId());
             int resultCount = preparedStatement.executeUpdate();
 
             return resultCount > 0;
@@ -160,7 +161,7 @@ public class ClientMappingManager extends ClientMapping {
         try (Connection connection = (cachedConnection != null && !cachedConnection.isClosed()) ? cachedConnection : dataSource.getConnection()) {
 
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_CLIENT_MAPPING);
-            preparedStatement.setInt(0, id);
+            preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {

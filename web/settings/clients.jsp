@@ -24,7 +24,7 @@
             clientId = 0;
         }
     }
-    
+
     String customJavascript = "$('#form-delete').prop('disabled', " + ((clientId > 0) ? "false" : "true") + ");";
 
     request.setAttribute("formHeadline", formHeadline);
@@ -35,6 +35,16 @@
     request.setAttribute("clientDescription", clientDescription);
 
     if (request.getMethod().equalsIgnoreCase("post")) {
+
+        if (request.getParameter("delete") != null) {
+            clientId = Integer.parseInt(request.getParameter("client-id"));
+            Client client = EntityManager.create(Client.class).load(clientId);            
+            System.out.println("DELETING CLIENT......... " + client);
+            client.delete();
+            response.sendRedirect("");
+            return;
+        }
+
         if (request.getParameter("client-id") != null && !request.getParameter("client-id").isEmpty() && !request.getParameter("client-id").equals("0")) {
             int id = Integer.parseInt(request.getParameter("client-id"));
             Client updateClient = EntityManager.create(Client.class).load(id);
@@ -54,7 +64,7 @@
 <t:genericpage pageTitle="| Frontpage">
     <jsp:attribute name="footerJSScripts">
         <script>
-            
+
             function validateInputs() {
 
 
@@ -63,9 +73,9 @@
                 var clientDescription = $("#client-description").val().trim();
 
                 if (clientName.length < 1 || clientDescription.length < 1) {
-                    $('#form-submit').prop('disabled', true);
+                    $('#form-save').prop('disabled', true);
                 } else {
-                    $('#form-submit').prop('disabled', false);
+                    $('#form-save').prop('disabled', false);
                 }
 
             }
@@ -81,7 +91,7 @@
             });
 
             validateInputs();
-            
+
             // Delete button active 
             ${customJavascript}
         </script>
@@ -113,7 +123,7 @@
                     </div>
                     <div class="row">
                         <div class="medium-6 columns">
-                            <input type="submit" class="button" value="Save">
+                            <input type="submit" class="button" id="form-save" value="Save">
                         </div>
                         <div class="medium-6 columns">
                             <input type="submit" name="delete" id="form-delete" class="float-right button alert" value="Delete">
@@ -122,7 +132,7 @@
                 </form>
             </div>
             <div class="medium-4 columns left-colum-border">
-                <bulldog:ClientlList />
+                <bulldog:ClientList />
             </div>
         </div>
     </jsp:body>

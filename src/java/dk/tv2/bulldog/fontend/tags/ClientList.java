@@ -11,7 +11,7 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
  *
  * @author hjep
  */
-public class ClientlList extends SimpleTagSupport {
+public class ClientList extends SimpleTagSupport {
 
     @Override
     public void doTag() throws JspException {
@@ -21,8 +21,8 @@ public class ClientlList extends SimpleTagSupport {
         try {
             out.println("<h5>Clients</h5>");
             out.println("<ul class=\"no-bullet\">");
-            for(Client channel : clients) {
-                out.println("<li><a href=\"settings/clients/" + channel.getId() + "\"><i class=\"fi-torsos\"></i> " + channel.getName() + "</a></li>");
+            for(Client client : clients) {
+                out.println("<li><a href=\"settings/clients/" + client.getId() + "\"><i class=\"fi-torsos\"></i> " + client.getName() + "</a></li>");
             }
             out.println("</ul>");
         } catch (Exception ex) {
