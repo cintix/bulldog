@@ -64,11 +64,7 @@
 <t:genericpage pageTitle="| Frontpage">
     <jsp:attribute name="footerJSScripts">
         <script>
-
             function validateInputs() {
-
-
-
                 var clientName = $("#client-name").val().trim();
                 var clientDescription = $("#client-description").val().trim();
 
@@ -77,10 +73,7 @@
                 } else {
                     $('#form-save').prop('disabled', false);
                 }
-
             }
-
-
 
             $("#client-name").change(function () {
                 validateInputs();

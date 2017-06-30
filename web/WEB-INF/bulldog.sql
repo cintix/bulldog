@@ -41,4 +41,15 @@ CREATE TABLE client_response (
 CREATE INDEX client_response_id_idx ON client_response (client_id);		 
 CREATE INDEX client_response_client_mapping_id_idx ON client_response (client_mapping_id);	
 CREATE UNIQUE INDEX client_response_id_file_idx ON client_response (client_id, filename);
-	
+
+CREATE VIEW response as 
+SELECT      c.id as client_id,
+            c.name as client_name,
+            cm.id as mapping_id,
+            cm.name as mapping_name,
+            cr.filename as filename,
+            cr.response_code as response_code,
+            cr.response as response
+FROM 		client_response cr
+LEFT JOIN 	client_mapping cm on (cr.client_mapping_id = cm.id)
+LEFT JOIN   client c on (cr.client_id = c.id);	
