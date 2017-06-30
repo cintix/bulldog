@@ -8,8 +8,7 @@
       <link rel="stylesheet" href="css/frontpage.css">
     </jsp:attribute>
     <jsp:body>
-        <h4>TTV Backend</h4>
+        <h4>Bulldog Settings Backend - Mapping</h4>
         <p>&nbsp;</p>
-        <p>Vælg kanal</p>
     </jsp:body>
 </t:genericpage>
