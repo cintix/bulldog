@@ -31,7 +31,7 @@ public class ClientResponseManager extends ClientResponse {
 
     private final static String SELECT_ALL_CLIENTS = "SELECT * FROM response".intern();
     private final static String SELECT_CLIENT = "SELECT * FROM response where client_id = ? ".intern();
-    private final static String DELETE_CLIENT = "DELETE FROM client_response where now() < (created_at::timestamp + interval '7 day');".intern();
+    private final static String DELETE_CLIENT = "DELETE FROM client_response where now() > (created_at::timestamp + interval '7 day');".intern();
     private final static String INSERT_CLIENT = "INSERT INTO client_response (client_mapping_id, client_id, filename, created_at, response_code, response) values (?,?,?, NOW(), ?, ?)".intern();
 
     @Override

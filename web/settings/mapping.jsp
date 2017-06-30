@@ -1,3 +1,4 @@
+<%@page import="dk.tv2.bulldog.backend.threads.WatcherThread"%>
 <%@page import="java.util.Date"%>
 <%@page import="dk.tv2.bulldog.backend.io.Actions"%>
 <%@page import="dk.tv2.bulldog.backend.db.entities.ClientMapping"%>
@@ -61,6 +62,7 @@
             mappingId = Integer.parseInt(request.getParameter("mapping-id"));
             ClientMapping mapping = EntityManager.create(ClientMapping.class).load(mappingId);
             mapping.delete();
+            WatcherThread.remove(mapping);
             response.sendRedirect("");
             return;
         }
@@ -82,7 +84,7 @@
             updateClientMapping.setActions(mappingActions);
             updateClientMapping.setUpdated(new Date());
             updateClientMapping.setClientId(Integer.parseInt(request.getParameter("client-id")));
-
+            WatcherThread.register(updateClientMapping);
             updateClientMapping.update();
         } else {
             ClientMapping newClientMapping = EntityManager.create(ClientMapping.class);
@@ -92,6 +94,7 @@
             newClientMapping.setPattern(request.getParameter("mapping-pattern"));
             newClientMapping.setClientId(Integer.parseInt(request.getParameter("client-id")));
             newClientMapping.setActions(mappingActions);
+            WatcherThread.register(newClientMapping);
             newClientMapping.create();
         }
 

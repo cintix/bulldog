@@ -1,5 +1,6 @@
 package dk.tv2.bulldog.backend.threads;
 
+import dk.tv2.bulldog.backend.db.EntityManager;
 import dk.tv2.bulldog.backend.db.entities.ClientMapping;
 import dk.tv2.bulldog.backend.io.Actions;
 import java.io.File;
@@ -33,6 +34,12 @@ public class WatcherThread extends InteruptableThread {
         keys = new LinkedHashMap<>();
         try {
             watcher = FileSystems.getDefault().newWatchService();
+            
+            List<ClientMapping> clientMappings = EntityManager.create(ClientMapping.class).loadAll();
+            for (ClientMapping cm : clientMappings) {
+                register(cm);
+            }
+            
         } catch (IOException ex) {
             Logger.getLogger(WatcherThread.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -51,7 +58,7 @@ public class WatcherThread extends InteruptableThread {
 
             ClientMapping mapping = keys.get(key);
             Path dir = new File(mapping.getPath()).toPath();
-            
+
             if (dir == null) {
                 System.err.println("WatchKey not recognized!!");
                 continue;
@@ -66,19 +73,38 @@ public class WatcherThread extends InteruptableThread {
 
                 WatchEvent<Path> ev = (WatchEvent<Path>) event;
                 Path filename = ev.context();
-                Path child = dir.resolve(filename);
-                
-                if (kind == ENTRY_CREATE) {
-                    System.out.println("CREATION of " + child.toString());
-                }
-                
+                Path localFileAndPath = dir.resolve(filename);
+
                 if (kind == ENTRY_MODIFY) {
-                    System.out.println("MODIFICATION of " + child.toString());
+                    System.out.println("MODIFICATION of " + localFileAndPath.toString());
                 }
 
                 /**
                  * LOGIC -
                  */
+                int actions = mapping.getActions();
+                
+                if (Actions.contains(actions, Actions.CREATED) && kind == ENTRY_CREATE) {
+                    System.out.println("CREATION of " + localFileAndPath.toString());
+                    
+                    /**
+                     * if localFileAndPath.name matches pattern then post
+                     */
+                    
+                    
+                    // Actions.CREATED.name();                    
+                    // HTTP POST
+                    
+                }
+                
+                
+                if (Actions.contains(actions, Actions.UPDATED) && kind == ENTRY_MODIFY) {
+                    System.out.println("MODIFICATION of " + localFileAndPath.toString());
+                    // Actions.UPDATED.name();                    
+                    // HTTP PUT
+                    
+                }
+
             }
 
             boolean valid = key.reset();
@@ -93,27 +119,45 @@ public class WatcherThread extends InteruptableThread {
         }
     }
 
-    
+    public static void remove(ClientMapping mapping) throws IOException {
+        for (WatchKey key : keys.keySet()) {
+            ClientMapping clientMapping = keys.get(key);
+            if (clientMapping.getId() == mapping.getId()) {
+                key.cancel();
+            }
+            keys.remove(key);
+        }
+
+    }
+
     /**
      * Register the given directory with the WatchService
      */
     public static void register(ClientMapping mapping) throws IOException {
+
+        for (WatchKey key : keys.keySet()) {
+            ClientMapping clientMapping = keys.get(key);
+            if (clientMapping.getId() == mapping.getId()) {
+                key.cancel();
+            }
+            keys.remove(key);
+        }
+
         Path dir = new File(mapping.getPath()).toPath();
         List<Kind> registeredActions = new LinkedList<>();
-        
+
         int mappingActions = mapping.getActions();
         for (Actions action : Actions.values()) {
             if (Actions.contains(mappingActions, action)) {
                 registeredActions.add(action.actionKind());
             }
         }
-        
+
         Kind[] arrayActions = new Kind[registeredActions.size()];
         arrayActions = registeredActions.toArray(arrayActions);
-                
         WatchKey key = dir.register(watcher, arrayActions);
+
         keys.put(key, mapping);
     }
-
 
 }

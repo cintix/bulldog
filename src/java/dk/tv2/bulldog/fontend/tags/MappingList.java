@@ -35,7 +35,6 @@ public class MappingList extends SimpleTagSupport {
                     }
                 }
                 out.println("</ul>");
-                out.println("</ul>");
                 out.println("</div>");
                 out.println("</li>");
             }
