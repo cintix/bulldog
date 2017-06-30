@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app id="Bulldog" version="2.4" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
-    <display-name>TeleText Backend</display-name>
-    <!--listener>
-        <listener-class>dk.tv2.bulldog.fontend.listener.TextTVServletContextListener</listener-class>
-    </listener-->
+    <display-name>Bulldog Backend</display-name>
+    
+    <listener>
+        <listener-class>dk.tv2.bulldog.backend.listeners.BulldogServletContextListener</listener-class>
+    </listener>
+    
+    
     <resource-ref>
         <description>ApplicationData</description>
         <res-ref-name>jdbc/bulldog</res-ref-name>
@@ -22,7 +25,7 @@
         </init-param>
         <init-param>
             <param-name>to-url</param-name>
-            <param-value>/settings/mapping.jsp?__channel_id=$1</param-value>
+            <param-value>/settings/mapping.jsp?__mapping_id=$1</param-value>
         </init-param>
         <init-param>
             <param-name>matchs</param-name>
@@ -65,7 +68,7 @@
         </init-param>
         <init-param>
             <param-name>to-url</param-name>
-            <param-value>/settings/clients.jsp?__channel_id=$1</param-value>
+            <param-value>/settings/clients.jsp?__client_id=$1</param-value>
         </init-param>
         <init-param>
             <param-name>matchs</param-name>

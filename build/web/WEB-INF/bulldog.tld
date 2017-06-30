@@ -13,5 +13,12 @@
     <tag-class>dk.tv2.bulldog.fontend.tags.TopMenuView</tag-class>
     <body-content>empty</body-content>
   </tag> 
+  
+  <tag>
+    <name>ClientlList</name>
+    <tag-class>dk.tv2.bulldog.fontend.tags.ClientlList</tag-class>
+    <body-content>empty</body-content>
+  </tag> 
+    
 </taglib>
 

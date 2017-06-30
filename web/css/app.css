@@ -220,7 +220,7 @@ td {
 }
 
 .bigger {
-   font-size: 1.2em; 
+    font-size: 1.2em; 
 }
 
 .key-text {
@@ -228,3 +228,17 @@ td {
     display: inline-block;
     width: 115px;
 }
+
+a, a:visited {
+    text-decoration: underline; 
+}
+
+a {
+    color: #008cba;
+    text-decoration: none;
+    line-height: inherit; }
+
+a , a:hover, a:focus { color: rgba(66, 99 ,0,1); }
+
+.button {background-color: rgb(120, 164, 33);}
+.button:hover, .button:focus {background-color: #2a7b1a;}
