@@ -3,6 +3,8 @@ package dk.tv2.bulldog.backend.threads;
 import dk.tv2.bulldog.backend.db.EntityManager;
 import dk.tv2.bulldog.backend.db.entities.ClientMapping;
 import dk.tv2.bulldog.backend.io.Actions;
+import dk.tv2.bulldog.backend.io.BinaryFile;
+import dk.tv2.bulldog.backend.models.Response;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -29,17 +31,19 @@ public class WatcherThread extends InteruptableThread {
 
     private static WatchService watcher;
     private static Map<WatchKey, ClientMapping> keys;
+    
+    private static long MAX_FILE_SIZE = 1024 * 1024 * 10; //10MB
 
     public WatcherThread() {
         keys = new LinkedHashMap<>();
         try {
             watcher = FileSystems.getDefault().newWatchService();
-            
+
             List<ClientMapping> clientMappings = EntityManager.create(ClientMapping.class).loadAll();
             for (ClientMapping cm : clientMappings) {
                 register(cm);
             }
-            
+
         } catch (IOException ex) {
             Logger.getLogger(WatcherThread.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -74,7 +78,8 @@ public class WatcherThread extends InteruptableThread {
                 WatchEvent<Path> ev = (WatchEvent<Path>) event;
                 Path filename = ev.context();
                 Path localFileAndPath = dir.resolve(filename);
-
+                Response response = new Response();
+                
                 if (kind == ENTRY_MODIFY) {
                     System.out.println("MODIFICATION of " + localFileAndPath.toString());
                 }
@@ -82,27 +87,43 @@ public class WatcherThread extends InteruptableThread {
                 /**
                  * LOGIC -
                  */
-                int actions = mapping.getActions();
                 
-                if (Actions.contains(actions, Actions.CREATED) && kind == ENTRY_CREATE) {
-                    System.out.println("CREATION of " + localFileAndPath.toString());
+                try {
+                    int actions = mapping.getActions();
+                    boolean patternMatch = false;
+                    String pattern = mapping.getPattern().replaceAll("\\*", "\\\\w*").replaceAll("\\?", "\\\\w");
                     
-                    /**
-                     * if localFileAndPath.name matches pattern then post
-                     */
+                    if (localFileAndPath.getFileName().toString().matches(pattern)) {
+                        patternMatch = true;
+                    }
                     
+                    if (patternMatch && Actions.contains(actions, Actions.CREATED) && kind == ENTRY_CREATE) {
+                        System.out.println("CREATION of " + localFileAndPath.toString());
+
+                        // Actions.CREATED.name();                    
+                        // HTTP POST
+                        File localFile = localFileAndPath.toFile();
+                        if (localFile.length() > MAX_FILE_SIZE) {
+                            throw new IOException(localFile.toString() + " size to large ");
+                        }
+                        
+                        BinaryFile binaryFile = new BinaryFile(localFile);
+                        response.setAction(Actions.CREATED.name());
+                        response.setMappingName(mapping.getName());
+                        response.setContent(binaryFile.getBase64());
+                        response.setMd5(binaryFile.getMD5());
+                        
+                    }
                     
-                    // Actions.CREATED.name();                    
-                    // HTTP POST
+                    if (patternMatch && Actions.contains(actions, Actions.UPDATED) && kind == ENTRY_MODIFY) {
+                        System.out.println("MODIFICATION of " + localFileAndPath.toString());
+                        // Actions.UPDATED.name();                    
+                        // HTTP PUT
+
+                    }
                     
-                }
-                
-                
-                if (Actions.contains(actions, Actions.UPDATED) && kind == ENTRY_MODIFY) {
-                    System.out.println("MODIFICATION of " + localFileAndPath.toString());
-                    // Actions.UPDATED.name();                    
-                    // HTTP PUT
-                    
+                } catch (IOException iOException) {
+                    System.out.println(iOException.toString());
                 }
 
             }

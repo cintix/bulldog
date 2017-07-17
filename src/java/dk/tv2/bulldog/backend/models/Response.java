@@ -6,7 +6,7 @@ import java.util.Date;
  *
  * @author migo
  */
-public class Reponse {
+public class Response {
 
     private String clientName;
     private String mappingName;

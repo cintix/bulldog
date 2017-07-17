@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/Users/migo/project/Bulldog/web/settings/clients.jsp</file>
+            <file>file:/Users/migo/project/Bulldog/src/java/dk/tv2/bulldog/backend/db/cache/ClientCacheManager.java</file>
+            <file>file:/Users/migo/project/Bulldog/src/java/dk/tv2/bulldog/backend/listeners/BulldogServletContextListener.java</file>
+            <file>file:/Users/migo/project/Bulldog/src/java/dk/tv2/bulldog/fontend/tags/ClientList.java</file>
+            <file>file:/Users/migo/project/Bulldog/src/java/dk/tv2/bulldog/backend/io/Actions.java</file>
+            <file>file:/Users/migo/project/Bulldog/web/css/app.css</file>
+            <file>file:/Users/migo/project/Bulldog/web/settings/mapping.jsp</file>
+            <file>file:/Users/migo/project/Bulldog/src/java/dk/tv2/bulldog/fontend/tags/ClientInputList.java</file>
+            <file>file:/Users/migo/project/Bulldog/src/java/dk/tv2/bulldog/backend/models/Reponse.java</file>
+            <file>file:/Users/migo/project/Bulldog/src/java/dk/tv2/bulldog/backend/threads/WatcherThread.java</file>
+            <file>file:/Users/migo/project/Bulldog/src/java/dk/tv2/bulldog/backend/db/entities/ClientResponse.java</file>
+            <file>file:/Users/migo/project/Bulldog/src/java/dk/tv2/bulldog/backend/db/managers/DataSourceManager.java</file>
+            <file>file:/Users/migo/project/Bulldog/src/java/dk/tv2/bulldog/backend/cache/MemoryCache.java</file>
+            <file>file:/Users/migo/project/Bulldog/web/WEB-INF/bulldog.properties</file>
+            <file>file:/Users/migo/project/Bulldog/web/WEB-INF/bulldog.tld</file>
+            <file>file:/Users/migo/project/Bulldog/web/WEB-INF/web.xml</file>
+            <file>file:/Users/migo/project/Bulldog/src/java/dk/tv2/bulldog/backend/db/managers/ClientResponseManager.java</file>
+            <file>file:/Users/migo/project/Bulldog/web/WEB-INF/bulldog.sql</file>
+            <file>file:/Users/migo/project/Bulldog/src/java/dk/tv2/bulldog/fontend/tags/MappingList.java</file>
+        </group>
+    </open-files>
+</project-private>
